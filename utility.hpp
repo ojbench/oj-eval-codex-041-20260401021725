@@ -5,33 +5,12 @@
 
 namespace sjtu {
 
+// Make sjtu::pair fully compatible with std::pair by aliasing.
+// This ensures iterator value_type and operator-> interoperate safely
+// with std::map-backed implementations.
 template<class T1, class T2>
-class pair {
-public:
-    T1 first;
-    T2 second;
+using pair = std::pair<T1, T2>;
 
-    constexpr pair() = default;
-    constexpr pair(const pair &other) = default;
-    constexpr pair(pair &&other) = default;
-
-    template<class U1 = T1, class U2 = T2>
-    constexpr pair(U1 &&x, U2 &&y)
-        : first(std::forward<U1>(x)), second(std::forward<U2>(y)) {}
-
-    template<class U1, class U2>
-    constexpr pair(const pair<U1, U2> &other)
-        : first(other.first), second(other.second) {}
-
-    template<class U1, class U2>
-    constexpr pair(pair<U1, U2> &&other)
-        : first(std::move(other.first))
-        ,second(std::move(other.second)) {}
-};
-
-template<class T1, class T2>
-pair(T1, T2) -> pair<T1, T2>;
-
-}
+} // namespace sjtu
 
 #endif
